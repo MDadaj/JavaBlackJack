@@ -4,7 +4,7 @@
 
 ## About this project:
 
-I am a freshman Computer Science major, and I was having an easy time with my introductory Computer Science class, so I decided to recreate a card game using Java, the language I'm currently learning. It has been put together over extra time after I completed my homework, and is my first individual project (not for class). I plan to keep working on it, and I already have some plans for some new updates and functionality to come in future updates. 
+I am a freshman Computer Science major, and I wanted to try to build something outside of my coursework, so I decided to recreate a card game using Java, the language I'm currently learning. It has been put together over extra time after I completed my homework, and is my first individual project (not for class). I plan to keep working on it, and I already have some plans for some new updates and functionality to come in future updates. 
 
 ## How to use:
 First, ensure you have some version of Java installed:
@@ -12,11 +12,14 @@ First, ensure you have some version of Java installed:
 ```
 java --version
 ```
+```
+javac --version
+```
 
 Then, enter the following into your terminal:
 
 ```
-cd /path/to/BlackJack.java
+cd /path/to/folder-containing-BlackJack
 ```
 
 ```
@@ -24,13 +27,13 @@ javac BlackJack.java
 ```
 
 ```
-java BlackJack.java
+java BlackJack
 ```
 
 ---
 
 ## Methods and method functions:
-* `Main(String[] args)`
+* `main(String[] args)`
     * Takes user input
     * Begins the game
     * Allows player to take turns, choosing between a 'hit' or a 'stand'.
@@ -72,3 +75,63 @@ java BlackJack.java
     * Utilizing the monetary system to hold more of the user's credits if they choose to split, with the chance of a higher reward
 * Classes:
     * Making a separate class for cards, to make them easier to manage and for simplification of code.
+ 
+## Gameplay Sample:
+
+```
+===================
+===================
+=  Blackjack 1.0  =
+=  By Max Dadaj   =
+===================
+===================
+
+Hello, would you like to play Blackjack? (Y/N): y
+
+******************
+
+Dealer cards: Jack 
+
+Player cards: Ace Three 
+
+******************
+
+Hit or stand? hit
+
+******************
+
+Dealer reveals second card: 
+
+******************
+
+Dealer cards: Ten Jack 
+
+Player cards: Ace Three Seven 
+
+******************
+
+You are currently 1 points different from the dealer.
+
+Your score: 21
+
+Dealer score: 20
+
+******************
+
+Player wins!
+
+******************
+
+Your score: 21
+
+Dealer score: 20
+
+******************
+
+Dealer cards: Ten Jack 
+
+Player cards: Ace Three Seven 
+
+******************
+
+```
