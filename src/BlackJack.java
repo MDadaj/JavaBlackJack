@@ -334,9 +334,6 @@ public class BlackJack {
 
     public static void main(String[] args){
 
-        //variables
-
-
         //initial config
         System.out.print("===================\n===================\n=  Blackjack 1.0  =\n=  By Max Dadaj   =\n===================\n===================\n");
         System.out.print("\nHello, would you like to play Blackjack? (Y/N): ");
