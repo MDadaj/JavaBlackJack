@@ -35,7 +35,9 @@ java BlackJack
 ## Methods and method functions:
 * `main(String[] args)`
     * Takes user input
-    * Begins the game
+    * Runs playGame()
+    * Asks the user if they want to play again and resets variables
+* `playGame()`
     * Allows player to take turns, choosing between a 'hit' or a 'stand'.
     * Hold win/loss conditions, and displays end message based on outcome
     * Conditions checked:
@@ -45,9 +47,10 @@ java BlackJack
             * Dealer busts (score over 21).
             * Dealer can no longer draw, and player has a higher score.
         * Dealer wins if:
-            * Player busts (score over 21);
+            * Player busts (score over 21).
             * Player chooses to stand, but the dealer ends with a higher score.
         * Draw (push) if scores are equal.
+    
 * `cardToString(int cardNum)`
     * Takes an input (1-13), and returns a string with the card name assigned to that number.
 * `playerDraw()`

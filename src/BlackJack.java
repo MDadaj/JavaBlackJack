@@ -338,7 +338,7 @@ public class BlackJack {
         System.out.print("===================\n===================\n=  Blackjack 1.0  =\n=  By Max Dadaj   =\n===================\n===================\n");
         System.out.print("\nHello, would you like to play Blackjack? (Y/N): ");
         play = scan.next();
-        while (play.equals( "y") || play.equals("Y")){
+        while ((play.toLowerCase()).equals("y")){
             playGame();
             System.out.print("Would you like to play again? ");
             play = scan.next();
