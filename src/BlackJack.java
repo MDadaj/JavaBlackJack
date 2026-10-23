@@ -21,6 +21,10 @@ public class BlackJack {
     public static String play;
     public static String move;
 
+    //Creates a bank for the user
+    public static int bank;
+    public static int hold;
+
     //Scanner usable by all classes
     public static Scanner scan = new Scanner(System.in);
 
@@ -145,6 +149,13 @@ public class BlackJack {
     }
     public static void playGame(){
     //Both the player and the dealer draw 2 cards
+        
+        System.out.println();
+        System.out.println("******************");
+        System.out.println();
+        System.out.print("How much would you like to bet? you currently have $" + bank + ". ");
+        int betAmt = scan.nextInt();
+        finManager("bet", betAmt);
         dealerDraw();
         dealerDraw();
         System.out.println();
@@ -163,6 +174,9 @@ public class BlackJack {
         int numPlayerMoves = 1;
         while (playerScore < 21 && (dealerScore - dealerCards[1]) < 21){
             System.out.print("Hit or stand? ");
+            if (numPlayerMoves == 1){
+                System.out.print("You may also choose to double down (\"dd\"): ");
+            }
             move = scan.next();
             if (move.equals("hit")){
 
@@ -215,6 +229,42 @@ public class BlackJack {
                 //Exits the loop
                 break;
             }
+            else if((move.toLowerCase()).equals("dd")){
+                finManager("doubledown", 0);
+                //Player draws another card
+                playerDraw();
+                System.out.println();
+
+                //Dealer reveals second card
+                if (numPlayerMoves == 1){
+                System.out.println("******************");
+                System.out.println();
+                System.out.println("Dealer reveals second card: ");
+                System.out.println();
+                System.out.println("******************");
+                System.out.println();
+                printDealerCards(0, 0);
+                }
+
+                //Checking for an ace
+                if ((playerScore > 21) && (playerAce > 0)){
+                    playerScore -= 10;
+                    playerAce -= 1;
+                }
+                numPlayerMoves++;
+                System.out.println();
+                printPlayerCards();
+                System.out.println();
+
+                //Prints difference of scores
+                System.out.println("******************");
+                System.out.println();
+                System.out.println("You are currently " + Math.abs(playerScore - dealerScore) + " point(s) different from the dealer.\n\nYour score: " + playerScore + "\n\nDealer score: " + dealerScore);
+                System.out.println("");
+                System.out.println("******************");
+                System.out.println("");
+                break;
+            }
         
         }
 
@@ -225,7 +275,21 @@ public class BlackJack {
             System.out.println("******************");
             System.out.println();
             System.out.println("Your score: " + playerScore + "\n\nDealer score: " + dealerScore);
-            System.exit(0);
+            System.out.println();
+            System.out.println("******************");
+            System.out.println();
+            printDealerCards(0,0);
+            System.out.println();
+            printPlayerCards();
+            System.out.println();
+            System.out.println("******************");
+            System.out.println();
+            finManager("lose", 0);
+            System.out.println("You have a balance of $" + bank + " remaining.");
+            System.out.println();
+            System.out.println("******************");
+            System.out.println();
+            return;
         }
 
         //The dealer is not allowed to draw after they have a score above 17.
@@ -260,6 +324,11 @@ public class BlackJack {
             System.out.println();
             System.out.println("******************");
             System.out.println();
+            finManager("win", 0);
+            System.out.println("You have a balance of $" + bank + " remaining.");
+            System.out.println();
+            System.out.println("******************");
+            System.out.println();
         }else{
 
             //Checks if the player has a higher score
@@ -278,6 +347,12 @@ public class BlackJack {
                 System.out.println();
                 System.out.println("******************");
                 System.out.println();
+                finManager("win", 0);
+                System.out.println("You have a balance of $" + bank + " remaining.");
+                System.out.println();
+                System.out.println("******************");
+                System.out.println();
+                
             }
 
             //Checks if the dealer holds a higher score
@@ -293,6 +368,11 @@ public class BlackJack {
                 printDealerCards(0,0);
                 System.out.println();
                 printPlayerCards();
+                System.out.println();
+                System.out.println("******************");
+                System.out.println();
+                finManager("lose", 0);
+                System.out.println("You have a balance of $" + bank + " remaining.");
                 System.out.println();
                 System.out.println("******************");
                 System.out.println();
@@ -314,6 +394,11 @@ public class BlackJack {
                 System.out.println();
                 System.out.println("******************");
                 System.out.println();
+                finManager("push", 0);
+                System.out.println("You have a balance of $" + bank + " remaining.");
+                System.out.println();
+                System.out.println("******************");
+                System.out.println();
             }
         }
     }
@@ -328,8 +413,46 @@ public class BlackJack {
         playerScore = 0;
         dealerScore = 0;
         move = "";
+        hold = 0;
 
 
+    }
+
+    //Banking system
+    public static void finManager(String func, int amt){
+        switch (func){
+
+            //Sets initial bank value
+            case "start" -> bank = amt;
+            case "doubledown" -> {
+                bank -= hold;
+                hold = hold * 2;
+            }
+
+            //Allows the user to bet, and holds their betting money
+            case "bet" -> {
+                bank -= amt;
+                hold = amt;
+            }
+
+            // Clears the hold value when the user loses
+            case "lose" -> {
+                hold = 0;
+            }
+
+            //Clears hold and returns double what the user bet
+            case "win" -> {
+                bank += (hold * 2);
+                hold = 0;
+            }
+            //Returns the users money
+            case "push" -> {
+                bank += hold;
+                hold = 0;
+            }
+
+
+        }
     }
 
     public static void main(String[] args){
@@ -338,6 +461,7 @@ public class BlackJack {
         System.out.print("===================\n===================\n=  Blackjack 1.0  =\n=  By Max Dadaj   =\n===================\n===================\n");
         System.out.print("\nHello, would you like to play Blackjack? (Y/N): ");
         play = scan.next();
+        finManager("start", 5000);
         while ((play.toLowerCase()).equals("y")){
             playGame();
             System.out.print("Would you like to play again? ");
