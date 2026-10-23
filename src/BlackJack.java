@@ -17,6 +17,13 @@ public class BlackJack {
     public static int playerScore = 0;
     public static int dealerScore = 0;
 
+     //Variables to check if the player wants to play again and what move they're on
+    public static String play;
+    public static String move;
+
+    //Scanner usable by all classes
+    public static Scanner scan = new Scanner(System.in);
+
     //Converts cards from a number value to a string value
     public static String cardToString(int cardNum){
         if (cardNum == 1){
@@ -136,123 +143,128 @@ public class BlackJack {
         }
         System.out.println();
     }
+    public static void playGame(){
+    //Both the player and the dealer draw 2 cards
+        dealerDraw();
+        dealerDraw();
+        System.out.println();
+        System.out.println("******************");
+        System.out.println();
 
-    public static void main(String[] args){
+        //Only one of the dealer's cards is revealed
+        printDealerCards(1, 0);
+        System.out.println();
+        playerDraw();
+        playerDraw();
+        printPlayerCards();
+        System.out.println();
+        System.out.println("******************");
+        System.out.println();
+        int numPlayerMoves = 1;
+        while (playerScore < 21 && (dealerScore - dealerCards[1]) < 21){
+            System.out.print("Hit or stand? ");
+            move = scan.next();
+            if (move.equals("hit")){
 
-        //variables
-        String play;
-        Scanner scan = new Scanner(System.in);
-        String move;
+                //Player draws another card
+                playerDraw();
+                System.out.println();
 
-        //initial config
-        System.out.print("===================\n===================\n=  Blackjack 1.0  =\n=  By Max Dadaj   =\n===================\n===================\n");
-        System.out.print("\nHello, would you like to play Blackjack? (Y/N): ");
-        play = scan.next();
-        if(play.equals( "y")){
+                //Dealer reveals second card
+                if (numPlayerMoves == 1){
+                System.out.println("******************");
+                System.out.println();
+                System.out.println("Dealer reveals second card: ");
+                System.out.println();
+                System.out.println("******************");
+                System.out.println();
+                printDealerCards(0, 0);
+                }
 
-            //Both the player and the dealer draw 2 cards
-            dealerDraw();
-            dealerDraw();
+                //Checking for an ace
+                if ((playerScore > 21) && (playerAce > 0)){
+                    playerScore -= 10;
+                    playerAce -= 1;
+                }
+                numPlayerMoves++;
+                System.out.println();
+                printPlayerCards();
+                System.out.println();
+
+                //Prints difference of scores
+                System.out.println("******************");
+                System.out.println();
+                System.out.println("You are currently " + Math.abs(playerScore - dealerScore) + " point(s) different from the dealer.\n\nYour score: " + playerScore + "\n\nDealer score: " + dealerScore);
+                System.out.println("");
+                System.out.println("******************");
+                System.out.println("");
+            }
+            else if (move.equals("stand")){
+
+                //Shows dealer's second card
+                if (cardNumDealer == 2){
+                    System.out.println();
+                    System.out.println("******************");
+                    System.out.println();
+                    System.out.print("Dealer reveals second card: \n");
+                    printDealerCards(0, 0);
+                    System.out.println();
+                    System.out.println("******************");
+                    System.out.println();
+                }
+                //Exits the loop
+                break;
+            }
+        
+        }
+
+        //Checks if the player busts (score exceeding 21).
+        if(playerScore > 21){
+            System.out.println("Player busts. Dealer wins.");
             System.out.println();
             System.out.println("******************");
             System.out.println();
+            System.out.println("Your score: " + playerScore + "\n\nDealer score: " + dealerScore);
+            System.exit(0);
+        }
 
-            //Only one of the dealer's cards is revealed
-            printDealerCards(1, 0);
+        //The dealer is not allowed to draw after they have a score above 17.
+        while (dealerScore < 17){
+            System.out.println("Dealer is drawing...");
             System.out.println();
-            playerDraw();
-            playerDraw();
+            System.out.println("******************");
+            System.out.println();
+            dealerDraw();
+
+            //Checking for an ace
+            if ((dealerScore > 21) && (dealerAce > 0)){
+                    dealerScore -= 10;
+                    dealerAce -= 1;
+                }
+
+        }
+
+        //Checks if the dealer busts (score exceeding 21).
+        if (dealerScore > 21){
+            System.out.println("Dealer busts. player wins.");
+            System.out.println();
+            System.out.println("******************");
+            System.out.println();
+            System.out.println("Your score: " + playerScore + "\n\nDealer score: " + dealerScore);
+            System.out.println();
+            System.out.println("******************");
+            System.out.println();
+            printDealerCards(0,0);
+            System.out.println();
             printPlayerCards();
             System.out.println();
             System.out.println("******************");
             System.out.println();
-            int numPlayerMoves = 1;
-            while (playerScore < 21 && (dealerScore - dealerCards[1]) < 21){
-                System.out.print("Hit or stand? ");
-                move = scan.next();
-                if (move.equals("hit")){
+        }else{
 
-                    //Player draws another card
-                    playerDraw();
-                    System.out.println();
-
-                    //Dealer reveals second card
-                    if (numPlayerMoves == 1){
-                    System.out.println("******************");
-                    System.out.println();
-                    System.out.println("Dealer reveals second card: ");
-                    System.out.println();
-                    System.out.println("******************");
-                    System.out.println();
-                    printDealerCards(0, 0);
-                    }
-
-                    //Checking for an ace
-                    if ((playerScore > 21) && (playerAce > 0)){
-                        playerScore -= 10;
-                        playerAce -= 1;
-                    }
-                    numPlayerMoves++;
-                    System.out.println();
-                    printPlayerCards();
-                    System.out.println();
-
-                    //Prints difference of scores
-                    System.out.println("******************");
-                    System.out.println();
-                    System.out.println("You are currently " + Math.abs(playerScore - dealerScore) + " points different from the dealer.\n\nYour score: " + playerScore + "\n\nDealer score: " + dealerScore);
-                    System.out.println("");
-                    System.out.println("******************");
-                    System.out.println("");
-                }
-                else if (move.equals("stand")){
-
-                    //Shows dealer's second card
-                    if (cardNumDealer == 2){
-                        System.out.println();
-                        System.out.println("******************");
-                        System.out.println();
-                        System.out.print("Dealer reveals second card: \n");
-                        printDealerCards(0, 0);
-                        System.out.println();
-                        System.out.println("******************");
-                        System.out.println();
-                    }
-                    //Exits the loop
-                    break;
-                }
-            
-            }
-
-            //Checks if the player busts (score exceeding 21).
-            if(playerScore > 21){
-                System.out.println("Player busts. Dealer wins.");
-                System.out.println();
-                System.out.println("******************");
-                System.out.println();
-                System.out.println("Your score: " + playerScore + "\n\nDealer score: " + dealerScore);
-                System.exit(0);
-            }
-
-            //The dealer is not allowed to draw after they have a score above 17.
-            while (dealerScore < 17){
-                System.out.println("Dealer is drawing...");
-                System.out.println();
-                System.out.println("******************");
-                System.out.println();
-                dealerDraw();
-
-                //Checking for an ace
-                if ((dealerScore > 21) && (dealerAce > 0)){
-                        dealerScore -= 10;
-                        dealerAce -= 1;
-                    }
-
-            }
-
-            //Checks if the dealer busts (score exceeding 21).
-            if (dealerScore > 21){
-                System.out.println("Dealer busts. player wins.");
+            //Checks if the player has a higher score
+            if (playerScore > dealerScore){
+                System.out.println("Player wins!");
                 System.out.println();
                 System.out.println("******************");
                 System.out.println();
@@ -266,68 +278,80 @@ public class BlackJack {
                 System.out.println();
                 System.out.println("******************");
                 System.out.println();
-            }else{
-
-                //Checks if the player has a higher score
-                if (playerScore > dealerScore){
-                    System.out.println("Player wins!");
-                    System.out.println();
-                    System.out.println("******************");
-                    System.out.println();
-                    System.out.println("Your score: " + playerScore + "\n\nDealer score: " + dealerScore);
-                    System.out.println();
-                    System.out.println("******************");
-                    System.out.println();
-                    printDealerCards(0,0);
-                    System.out.println();
-                    printPlayerCards();
-                    System.out.println();
-                    System.out.println("******************");
-                    System.out.println();
-                }
-
-                //Checks if the dealer holds a higher score
-                else if (playerScore < dealerScore){
-                    System.out.println("Dealer wins!");
-                    System.out.println();
-                    System.out.println("******************");
-                    System.out.println();
-                    System.out.println("Your score: " + playerScore + "\n\nDealer score: " + dealerScore);
-                    System.out.println();
-                    System.out.println("******************");
-                    System.out.println();
-                    printDealerCards(0,0);
-                    System.out.println();
-                    printPlayerCards();
-                    System.out.println();
-                    System.out.println("******************");
-                    System.out.println();
-                }
-
-                //Checks if the player and dealer scores are the same
-                else if(playerScore == dealerScore){
-                    System.out.println("Push!");
-                    System.out.println();
-                    System.out.println("******************");
-                    System.out.println();
-                    System.out.println("Your score: " + playerScore + "\n\nDealer score: " + dealerScore);
-                    System.out.println();
-                    System.out.println("******************");
-                    System.out.println();
-                    printDealerCards(0,0);
-                    System.out.println();
-                    printPlayerCards();
-                    System.out.println();
-                    System.out.println("******************");
-                    System.out.println();
-                }
             }
+
+            //Checks if the dealer holds a higher score
+            else if (playerScore < dealerScore){
+                System.out.println("Dealer wins!");
+                System.out.println();
+                System.out.println("******************");
+                System.out.println();
+                System.out.println("Your score: " + playerScore + "\n\nDealer score: " + dealerScore);
+                System.out.println();
+                System.out.println("******************");
+                System.out.println();
+                printDealerCards(0,0);
+                System.out.println();
+                printPlayerCards();
+                System.out.println();
+                System.out.println("******************");
+                System.out.println();
+            }
+
+            //Checks if the player and dealer scores are the same
+            else if(playerScore == dealerScore){
+                System.out.println("Push!");
+                System.out.println();
+                System.out.println("******************");
+                System.out.println();
+                System.out.println("Your score: " + playerScore + "\n\nDealer score: " + dealerScore);
+                System.out.println();
+                System.out.println("******************");
+                System.out.println();
+                printDealerCards(0,0);
+                System.out.println();
+                printPlayerCards();
+                System.out.println();
+                System.out.println("******************");
+                System.out.println();
+            }
+        }
+    }
+    public static void gameReset(){
+        //Resets all variables to start a new game.
+        playerCards = new int[16];
+        dealerCards = new int[16];
+        playerAce = 0;
+        dealerAce = 0;
+        cardNumDealer = 0;
+        cardNumPlayer = 0;
+        playerScore = 0;
+        dealerScore = 0;
+        move = "";
+
+
+    }
+
+    public static void main(String[] args){
+
+        //variables
+
+
+        //initial config
+        System.out.print("===================\n===================\n=  Blackjack 1.0  =\n=  By Max Dadaj   =\n===================\n===================\n");
+        System.out.print("\nHello, would you like to play Blackjack? (Y/N): ");
+        play = scan.next();
+        while (play.equals( "y") || play.equals("Y")){
+            playGame();
+            System.out.print("Would you like to play again? ");
+            play = scan.next();
+            gameReset();
+
         }
         
         //If the user does not want to play, the program terminates.
-        else{
-            System.out.println("Goodbye. Exiting...");
-        }
+        System.out.println("Goodbye. Exiting...");
+        
     }
     
 }
