@@ -174,7 +174,7 @@ public class BlackJack {
         int numPlayerMoves = 1;
         while (playerScore < 21 && (dealerScore - dealerCards[1]) < 21){
             System.out.print("Hit or stand? ");
-            if (numPlayerMoves == 1){
+            if ((numPlayerMoves == 1) && (bank >= hold)){
                 System.out.print("You may also choose to double down (\"dd\"): ");
             }
             move = scan.next();
@@ -431,8 +431,14 @@ public class BlackJack {
 
             //Allows the user to bet, and holds their betting money
             case "bet" -> {
-                bank -= amt;
-                hold = amt;
+                if(Math.abs(amt) > bank){
+                    hold = bank;
+                    bank = 0;
+                }
+                else{
+                bank -= Math.abs(amt);
+                hold = Math.abs(amt);
+                }
             }
 
             // Clears the hold value when the user loses
@@ -464,9 +470,14 @@ public class BlackJack {
         finManager("start", 5000);
         while ((play.toLowerCase()).equals("y")){
             playGame();
+            if (bank <= 0){
+                break;
+            }
+            else{
             System.out.print("Would you like to play again? ");
             play = scan.next();
             gameReset();
+            }
 
         }
         
